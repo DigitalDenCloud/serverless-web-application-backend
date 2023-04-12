@@ -12,13 +12,32 @@ Globals:
     MemorySize: 128
 
 Resources:
-  SiteVisitorFunction:
+
+  GetCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: digitalden-visitor-count-table
+      CodeUri: get-function/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /get
+            Method: get
+
+  PutCountFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: digitalden-visitor-count-table
-      CodeUri: site_visitor_function/
+      CodeUri: put-function/
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
@@ -27,7 +46,7 @@ Resources:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /get
+            Path: /put
             Method: get
 
   DynamoDBTable:
@@ -43,13 +62,13 @@ Resources:
             KeyType: "HASH"
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Description: "API Gateway endpoint URL for Prod stage for GetCountFunction function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  SiteVisitorFunction:
-    Description: "Implicit IAM Role created for SiteVisitorFunction"
-    Value: !GetAtt SiteVisitorFunction.Arn
+  GetCountFunction:
+    Description: "GetCountFunction Lambda Function ARN"
+    Value: !GetAtt GetCountFunction.Arn
+  GetCountFunctionIamRole:
+    Description: "Implicit IAM Role created for GetCountFunction"
+    Value: !GetAtt GetCountFunctionRole.Arn
 
