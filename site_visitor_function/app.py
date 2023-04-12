@@ -2,7 +2,7 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key # this is used for the DynamoDB Table Resource
 
-TABLE_NAME = "VisitorCountTable"  # Used to declare table 
+TABLE_NAME = "digitalden-visitor-count-table"  # Used to declare table 
 # Creating the DynamoDB Client
 dynamodb_client = boto3.client('dynamodb', region_name="eu-west-2")
 
