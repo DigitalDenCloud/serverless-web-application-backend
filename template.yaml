@@ -55,10 +55,10 @@ Resources:
         TableName: digitalden-visitor-count-table
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: "visitor_id"
+          - AttributeName: "ID"
             AttributeType: "S"
         KeySchema:
-          - AttributeName: "visitor_id"
+          - AttributeName: "ID"
             KeyType: "HASH"
 
 Outputs:
