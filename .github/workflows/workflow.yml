@@ -1,7 +1,9 @@
 name: SAM Validate, Test, Build, Deploy
 on:
   push:
-    branches: [ main ]
+    branches:
+      -main
+      -dev
 
 jobs:  
   build-and-deploy-infra:
@@ -26,3 +28,15 @@ jobs:
       - name: SAM Deploy
         run: |
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+
+  integration-test-backend:
+    needs: build-and-deploy-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: 
+          FIRST=$$(curl -s "https://8zqfnxf6tf.execute-api.eu-north-1.amazonaws.com/Prod/get" | jq ".body| tonumber"); \
+          curl -s "https://8zqfnxf6tf.execute-api.eu-north-1.amazonaws.com/Prod/put"; \
+          SECOND=$$(curl -s "https://8zqfnxf6tf.execute-api.eu-north-1.amazonaws.com/Prod/get" | jq ".body| tonumber"); \
+          echo "Comparing if first count ($$FIRST) is less than (<) second count ($$SECOND)"; \
+          if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
