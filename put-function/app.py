@@ -3,7 +3,7 @@ import json
 from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('digitalden-visitor-count-table')
+table = dynamodb.Table('visitor-count-table')
 
 
 def lambda_handler(event, context):

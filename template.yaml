@@ -18,7 +18,7 @@ Resources:
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: digitalden-visitor-count-table
+            TableName: visitor-count-table
       CodeUri: get-function/
       Handler: app.lambda_handler
       Runtime: python3.9
@@ -36,7 +36,7 @@ Resources:
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: digitalden-visitor-count-table
+            TableName: visitor-count-table
       CodeUri: put-function/
       Handler: app.lambda_handler
       Runtime: python3.9
@@ -52,7 +52,7 @@ Resources:
   DynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: digitalden-visitor-count-table
+        TableName: visitor-count-table
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: "ID"
