@@ -18,7 +18,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: digitalden-visitor-count-table
-      CodeUri: hello_world/
+      CodeUri: site_visitor_function/
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
