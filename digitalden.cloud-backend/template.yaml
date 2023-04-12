@@ -12,9 +12,12 @@ Globals:
     MemorySize: 128
 
 Resources:
-  HelloWorldFunction:
+  Site-Visitor-Function:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: digitalden-visitor-count-table
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.9
@@ -38,7 +41,7 @@ Resources:
         KeySchema:
           - AttributeName: "visitor_id"
             KeyType: "HASH"
-            
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
