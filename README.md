@@ -2,7 +2,7 @@
 
 Website: https://digitalden.cloud
 
-In the backend I create a visitor counter that is displayed on my webpage and updated every time there is a new visitor. The optimal way to do this is with a serverless app using the following tech stack:
+In the backend I created a visitor counter that is displayed on my webpage and updated every time there is a new visitor. The optimal way to do this is with a serverless app using the following tech stack:
 
 **Tech-Stack**:
 - AWS SAM (IAC)
@@ -12,7 +12,7 @@ In the backend I create a visitor counter that is displayed on my webpage and up
 - JavaScript
 - GitHub Actions
 
-#### Architecture:
+### Architecture
 
 ### Project Description
 Deployed all resources in the back-end using AWS SAM. Backend consists of **API Gateway**, **AWS Lambda** and **DynamoDB** and **DynamoDB JavaScript** to store and retrieve visitors count.
@@ -20,15 +20,15 @@ Deployed all resources in the back-end using AWS SAM. Backend consists of **API 
 ### DynamoDB
 In the SAM template, created a new DynamoDB resource to hold visitor counter data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. Holds a single attribute which will be updated by the Lambda function.
 
+[Cors Headers](resources/images/dynamodb-table.png)
+
 ### Lambda Function
 There are two types of Architectural Patterns.
 
-**Monolithic Function** (Putting all code in single Lambda Deployment)
-**Single Purposed Function** (Each Lambda per Functionality)
+- Monolithic Function** (Putting all code in single Lambda Deployment)
+- Single Purposed Function** (Each Lambda per Functionality)
 
-When deciding what architetural pattern to use there are many trade-offs between monoliths and services. 
-
-A monolithic function that has more branching and in general does more things, would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
+When deciding what architetural pattern to use there are many trade-offs between monoliths and services. A monolithic function that has more branching and in general does more things, would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
 
 Initally, I had started off by creating a single Monolithic lambda function, but then opted to create two single purposed functions.
 
@@ -41,8 +41,14 @@ Configured CORS headers. In the response of my Lambda Function,  I added the Acc
 
 In index.html added a Java Script thats going to make a fetch request to my API from API gateway.
 
+![Cors Headers](resources/images/cors-headers.png)
+
 ### Github Actions
 Set up a CI/CD pipeline on GitHub Actions. The pipeline activates upon pushing code starting with SAM Validation, Build and Deploy.
+
+![Build and Deploy Infra](resources/images/build-and-deploy-infra.png)
+
+This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
 
 Included an integration test, which test the API endpoint.
 
