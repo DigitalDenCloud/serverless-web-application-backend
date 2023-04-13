@@ -20,7 +20,19 @@ Deployed all resources in the back-end using AWS SAM. Backend consists of **API 
 ### DynamoDB
 In the SAM template, created a new DynamoDB resource to hold visitor counter data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. Holds a single attribute which will be updated by the Lambda function.
 
-[Cors Headers](resources/images/dynamodb-table.png)
+```
+  DynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: visitor-count-table
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: "ID"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "ID"
+            KeyType: "HASH"
+```
 
 ### Lambda Function
 There are two types of Architectural Patterns.
@@ -39,18 +51,53 @@ The SAM CLI deploys API infrastructure under the hood. Rest API allows access to
 
 Configured CORS headers. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers and set the allow origin as “*”.
 
+```
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Credentials': '*',
+            'Content-Type': 'application/json'
+        }
+    }
+```
+
 In index.html added a Java Script thats going to make a fetch request to my API from API gateway.
 
-![Cors Headers](resources/images/cors-headers.png)
 
 ### Github Actions
 Set up a CI/CD pipeline on GitHub Actions. The pipeline activates upon pushing code starting with SAM Validation, Build and Deploy.
 
-![Build and Deploy Infra](resources/images/build-and-deploy-infra.png)
+```
+jobs:  
+  build-and-deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: SAM Validate
+        run: |
+          sam validate
+      - name: SAM Build
+        run: |
+          sam build
+      - name: SAM Deploy
+        run: |
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+```
 
 This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
 
-Included an integration test, which test the API endpoint.
+Included an integration test, which test the GET API endpoint:
 
 ```
 integration-test:
