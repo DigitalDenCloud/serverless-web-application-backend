@@ -5,6 +5,7 @@ Website: https://digitalden.cloud
 In the backend I created a visitor counter that is displayed on my webpage and updated every time there is a new visitor. The optimal way to do this is with a serverless app using the following tech stack:
 
 **Tech-Stack**:
+------------------
 - AWS SAM (IAC)
 - DynamoDB
 - AWS Lambda
@@ -13,11 +14,14 @@ In the backend I created a visitor counter that is displayed on my webpage and u
 - GitHub Actions
 
 ### Architecture
+------------------
 
 ### Project Description
+------------------
 Deployed all resources in the back-end using AWS SAM. Backend consists of **API Gateway**, **AWS Lambda** and **DynamoDB** and **DynamoDB JavaScript** to store and retrieve visitors count.
 
 ### DynamoDB
+------------------
 In the SAM template, created a new DynamoDB resource to hold visitor count data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. Holds a single attribute which will be updated by the Lambda function.
 
 ```
@@ -35,6 +39,7 @@ In the SAM template, created a new DynamoDB resource to hold visitor count data.
 ```
 
 ### Lambda Function
+------------------
 There are two types of architectural patterns.
 
 - Monolithic Function (Putting all code in single Lambda deployment)
@@ -151,6 +156,7 @@ def lambda_handler(event, context):
 ```
 
 ### API Gateway and JavaScript
+------------------
 The SAM CLI deploys API infrastructure under the hood. Rest API allows access to URL endpoint to accept GET and POST methods. When API URL is accessed the Lambda function is invoked, returning data from DynamoDB table.
 
 Configured CORS headers. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers and set the allow origin as “*”.
@@ -182,6 +188,7 @@ In the index.html I added a JavaScript thats going to make a fetch request to my
 ```
 
 ### Github Actions
+------------------
 Set up a CI/CD pipeline on GitHub Actions. The pipeline activates upon pushing code starting with SAM Validation, Build and Deploy.
 
 ```
