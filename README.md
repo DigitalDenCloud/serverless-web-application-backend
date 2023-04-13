@@ -84,9 +84,9 @@ def lambda_handler(event, context):
     }
 ```
 
-However, after reading [AWS Lambda – should you have few monolithic functions or many single-purposed functions?but then opted to create two single purposed functions.] (https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/). I decided to break my monolithic function.
+However, I read a really interesting article by Yan Cui about monolithic functions and single-purposed functions. You can read that [HERE](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/).
 
-I reconfigured my Hello World Function. I created a get-function for for getting values out of my database:
+I decided to break my monolithic function. I reconfigured my Hello World Function, and created a get-function for for getting values out of my database:
 
 ```
 import boto3
