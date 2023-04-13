@@ -52,7 +52,14 @@ This workflow updates the SAM stack currently deployed. The AWS access keys are 
 
 Included an integration test, which test the API endpoint.
 
-![Integration Test](resources/images/integration-test.png)
+```
+integration-test:
+		FIRST=$$(curl -s "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get" | jq ".body| tonumber"); \
+		curl -s "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put"; \
+		SECOND=$$(curl -s "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get" | jq ".body| tonumber"); \
+		echo "Comparing if first count ($$FIRST) is less than (<) second count ($$SECOND)"; \
+		if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
+```  
 
 The test calls the GET API using curl and then calls my domain, digitalden.cloud. It Uses JQ, a query for JSON to grab the count property and then stores it in a variable.
 
