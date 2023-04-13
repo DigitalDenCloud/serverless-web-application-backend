@@ -19,7 +19,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: visitor-count-table
-      CodeUri: get-function/
+      CodeUri: lambda-functions/single-purposed-functions/get-function/
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
@@ -37,7 +37,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: visitor-count-table
-      CodeUri: put-function/
+      CodeUri: lambda-functions/single-purposed-functions/put-function/
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
