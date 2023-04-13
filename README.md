@@ -230,6 +230,6 @@ integration-test:
 		if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
 ```  
 
-- The test calls the GET API using curl and then calls my domain, digitalden.cloud. It Uses JQ, a query for JSON to grab the count property and then stores it in a variable.
+- The test calls the GET API using curl and then calls my domain, digitalden.cloud. It Uses jq, a query for JSON to grab the count property and then stores it in a variable.
 - The test then calls the API using curl, for a second time. However, this time it adds to the count, which increases the value, and stores it into a second variable.
 - If the first request is less than the second, the test passes.
