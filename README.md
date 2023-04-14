@@ -4,7 +4,7 @@
   <a href="img/">
     <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="architecture">
   </a>
-  <h2 align="center">A Serverless Website</h2>
+  <h1 align="center">A Serverless Website -backend</h1>
 <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD. 
     <br />
@@ -25,7 +25,7 @@
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>    
     <li><a href="#dynamodb">DynamoDB</a></li>
     <li><a href="#lambda-function">Lambda Function</a></li>
-    <li><a href="#api-gateway-and-javascript">API Gateway and JavaScript</a></li>
+    <li><a href="#api-gateway-&-javascript">API Gateway & JavaScript</a></li>
     <li><a href="#github-actions">Github Actions</a></li>
     <li><a href="#project-files>Project Files</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -260,7 +260,7 @@ def lambda_handler(event, context):
     }
 ```
 
-### API Gateway and JavaScript
+### API Gateway & JavaScript
 ------------------
 The SAM CLI deploys API infrastructure under the hood. Rest API allows access to my URL endpoint to accept GET and POST methods. When API URL is accessed the Lambda function is invoked, returning data from my DynamoDB table.
 
