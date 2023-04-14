@@ -25,9 +25,9 @@
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>    
     <li><a href="#dynamodb">DynamoDB</a></li>
     <li><a href="#lambda-function">Lambda Function</a></li>
-    <li><a href="#api-gateway-&-javascript">API Gateway & JavaScript</a></li>
+    <li><a href="#api-gateway-and-javascript">API Gateway and JavaScript</a></li>
     <li><a href="#github-actions">Github Actions</a></li>
-    <li><a href="#project-files>Project Files</a></li>
+    <li><a href="#project-files">Project Files</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -260,7 +260,7 @@ def lambda_handler(event, context):
     }
 ```
 
-### API Gateway & JavaScript
+### API Gateway and JavaScript
 ------------------
 The SAM CLI deploys API infrastructure under the hood. Rest API allows access to my URL endpoint to accept GET and POST methods. When API URL is accessed the Lambda function is invoked, returning data from my DynamoDB table.
 
