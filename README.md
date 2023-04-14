@@ -1,12 +1,13 @@
+<p align="center">
 # A Serverless Website
-
-Website: https://digitalden.cloud
 
 Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
 
+Website: https://digitalden.cloud
+
 The backend components of my website support a counter of visitors to my  website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of my counter API, before rendering the response in the footer of the page.  My site can now fetch and display the latest visitor count, while the Lambda function handled incrementation as it interacted exclusively with the database.
 
-### Tech-Stack:
+### Tech-Stack
 ------------------
 - AWS SAM
 - DynamoDB
@@ -22,7 +23,7 @@ The backend components of my website support a counter of visitors to my  websit
 
 ### Project Description
 ------------------
-To deploy my architesture I used SAM CLI as my Infrastructure as Code method and GitHub Actions as my CI/CD method. Backend consists of **API Gateway**, **AWS Lambda**, **DynamoDB** and **JavaScript** to store and retrieve visitors count.
+To deploy my architecture I used SAM CLI as my Infrastructure as Code method and GitHub Actions as my CI/CD method. Backend consists of **API Gateway**, **AWS Lambda**, **DynamoDB** and **JavaScript** to store and retrieve visitors count.
 
 ### AWS SAM CLI
 ------------------
@@ -78,7 +79,7 @@ There are two types of architectural patterns.
 - Monolithic Function (Putting all code in single Lambda deployment)
 - Single Purposed Function (Each Lambda per functionality)
 
-When deciding what architetural pattern to use there are many trade-offs between monoliths and services. A monolithic function has more branching and in general does more things, this would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
+When deciding what architectural pattern to use there are many trade-offs between monoliths and services. A monolithic function has more branching and in general does more things, this would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
 
 Initally, I created a single monolithic Lambda function:
 
@@ -238,7 +239,7 @@ The SAM CLI deploys API infrastructure under the hood. Rest API allows access to
 
 It was important to configure CORS headers. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers:
 
-```json
+```python
     return {
         'statusCode': 200,
         'headers': {
