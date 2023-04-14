@@ -1,4 +1,17 @@
+<br />
+
 <p align="center">
+  <a href="img/">
+    <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="cloudofthings" width="821" height="327">
+  </a>
+  <h3 align="center">A Serverless Website</h3>
+<p align="center">
+    Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
+    <br />
+  </p>
+
+
+  
 # A Serverless Website
 
 Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
