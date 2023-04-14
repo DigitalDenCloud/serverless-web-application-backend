@@ -16,7 +16,7 @@ In the backend I created a visitor counter that is displayed on my webpage and u
 ### Architecture
 ------------------
 
-![Architecture Diagram](resources/images/digitalden.cloud-backend-architecture.png)
+![Architecture Diagram](resources/images/digitalden.cloud-backend-architecture-2.png)
 
 ### Project Description
 ------------------
