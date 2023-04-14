@@ -4,7 +4,7 @@
   <a href="img/">
     <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="architecture">
   </a>
-  <h1 align="center">A Serverless Website -backend</h1>
+  <h1 align="center">A Serverless Website: Backend Repo</h1>
 <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD. 
     <br />
@@ -21,6 +21,7 @@
   <ol>
     <li><a href="#tech-stack">Tech Stack</a>
     <li><a href="#project-date">Project Date</a></li>
+    </li>
     <li><a href="#project-description">Project Description</a></li>
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>    
     <li><a href="#dynamodb">DynamoDB</a></li>
