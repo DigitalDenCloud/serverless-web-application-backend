@@ -16,13 +16,15 @@ In the backend I created a visitor counter that is displayed on my webpage and u
 ### Architecture
 ------------------
 
+![Architecture Diagram](resources/images/digitalden.cloud-backend-architecture.png)
+
 ### Project Description
 ------------------
 Deployed all resources in the back-end using AWS SAM. Backend consists of **API Gateway**, **AWS Lambda** and **DynamoDB** and **DynamoDB JavaScript** to store and retrieve visitors count.
 
 ### DynamoDB
 ------------------
-In the SAM template, created a new DynamoDB resource to hold visitor count data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. Holds a single attribute which will be updated by the Lambda function.
+In the SAM template, created a new DynamoDB resource to hold visitor count data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. The table holds a single attribute (ID), which will be updated by the Lambda function.
 
 ```
   DynamoDBTable:
@@ -89,9 +91,9 @@ def lambda_handler(event, context):
     }
 ```
 
-I read a really interesting article by Yan Cui, called [AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
+However, I read a really interesting article by Yan Cui, [AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
 
-I then decided to break my monolithic function. I reconfigured my Hello World Function, and created a get-function for for getting values out of my database:
+... and then decided to break my monolithic function. I reconfigured my Hello World Function, and created a get-function for for getting values out of my database:
 
 ```
 import boto3
