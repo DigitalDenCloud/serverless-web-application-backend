@@ -29,29 +29,29 @@ To deploy my architesture I used SAM CLI as my Infrastructure as Code method and
 
 The AWS SAM CLI is a command line tool that I used with AWS SAM templates to build and run my serverless applications. 
 
-#### Initialize my project
+#### Initialized my project
 
-I use the sam init command to initialize a new application project. I selected the Python for my Lambda code and Hello World Example project to start with. The AWS SAM CLI downloaded a starter template and created my project folder directory structure.
+- I use the sam init command to initialize a new application project. I selected the Python for my Lambda code and Hello World Example project to start with. The AWS SAM CLI downloaded a starter template and created my project folder directory structure.
 
-The stack included API Gateway, IAM Role and Lambda function.
+- The stack included API Gateway, IAM Role and Lambda function.
 
-#### Building my application for deployment
+#### Built my application for deployment
 
-I packaged my function dependencies and organized my project code and folder structure to prepare for deployment.
+- I packaged my function dependencies and organized my project code and folder structure to prepare for deployment.
 
-I used the sam build command to prepare my application for deployment. The AWS SAM CLI created a .aws-samdirectory and organizes my application dependencies and files there for deployment.
+- I used the sam build command to prepare my application for deployment. The AWS SAM CLI created a .aws-samdirectory and organized my application dependencies and files there for deployment.
 
-#### Performing local debugging and testing
+#### Performed local debugging and testing
 
-I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI created a local container, built my function, invokes it, and outputs the results.
+- I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI created a local container, built my function, invokes it, and outputs the results.
 
 ![Sam Local Invoke](resources/images/sam-local-invoke-putcountfunction.png)
 
-#### Deploying my application
+#### Deployed my application
 
-I configured my application's deployment settings and deployed to the AWS Cloud to provision my resources.
+- I configured my application's deployment settings and deployed to the AWS Cloud to provision my resources.
 
-I used the sam deploy --guided command to deploy my application through an interactive flow. The AWS SAM CLI guided me through configuring my application's deployment settings, transformed my template into AWS CloudFormation, and deployed to AWS CloudFormation to create my resources.
+- I used the sam deploy --guided command to deploy my application through an interactive flow. The AWS SAM CLI guided me through configuring my application's deployment settings, transformed my template into AWS CloudFormation, and deployed to AWS CloudFormation to create my resources.
 
 ### DynamoDB
 ------------------
