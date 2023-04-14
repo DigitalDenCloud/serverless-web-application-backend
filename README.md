@@ -2,9 +2,9 @@
 
 <p align="center">
   <a href="img/">
-    <img src="img/aws_crc_diagram.jpg" alt="cloudofthings" width="821" height="327">
+    <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="architecture">
   </a>
-  <h3 align="center">A Serverless Website</h3>
+  <h2 align="center">A Serverless Website</h2>
 <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD. 
     <br />
@@ -20,14 +20,14 @@
   <summary><h2 style="display: inline-block">Project Details</h2></summary>
   <ol>
     <li><a href="#tech-stack">Tech Stack</a>
-    <li><a href="#project-description">Project Description</a></li>
-    </li>
     <li><a href="#project-date">Project Date</a></li>
+    <li><a href="#project-description">Project Description</a></li>
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>    
     <li><a href="#dynamodb">DynamoDB</a></li>
     <li><a href="#lambda-function">Lambda Function</a></li>
     <li><a href="#api-gateway-and-javascript">API Gateway and JavaScript</a></li>
     <li><a href="#github-actions">Github Actions</a></li>
+    <li><a href="#project-files>Project Files</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -349,5 +349,10 @@ This script performs the following steps:
 
 5. If FIRST is less than or equal to SECOND, it prints "PASS", otherwise it prints "FAIL".
 
+### Project Files
+------------------
+* [SAM template](template.yaml)
+
 ### Acknowledgements
+------------------
 * [Cloud Resume Challenge](https://cloudresumechallenge.dev/)
