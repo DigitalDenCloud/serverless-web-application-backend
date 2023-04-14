@@ -1,6 +1,8 @@
-# A Serverless Website built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD
+# A Serverless Website
 
 Website: https://digitalden.cloud
+
+Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
 
 The backend components of my website support a counter of visitors to my  website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of my counter API, before rendering the response in the footer of the page.  My site can now fetch and display the latest visitor count, while the Lambda function handled incrementation as it interacted exclusively with the database.
 
@@ -41,7 +43,7 @@ I used the sam build command to prepare my application for deployment. The AWS S
 
 #### Performing local debugging and testing
 
-I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI created a local container, built my function, invokds it, and outputs the results.
+I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI created a local container, built my function, invokes it, and outputs the results.
 
 ![Sam Local Invoke](resources/images/sam-local-invoke-putcountfunction.png)
 
@@ -161,11 +163,11 @@ I decided to break my monolithic function into two single-purposed functions. I 
           Properties:
             Path: /put
             Method: get
-            ```
-
-
+```
 
 #### get-function
+
+I then updated the code in the functions:
 
 ```
 import boto3
@@ -195,7 +197,9 @@ def lambda_handler(event, context):
         'body': get_count()
     }
 ```
+
 #### put-function
+
 ```
 import boto3
 import json
@@ -294,7 +298,7 @@ jobs:
 
 This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
 
-Included an integration test, which test the GET API endpoint:
+Included an integration test, which tests the GET API endpoint:
 
 ```
 integration-test:
