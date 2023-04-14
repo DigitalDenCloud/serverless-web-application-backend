@@ -4,7 +4,10 @@ on:
     branches:
       - main
       - dev
-
+env:
+  PYTHON_VERSION: 3.9
+  AWS_DEFAULT_REGION: 'eu-west-2'
+  
 jobs:  
 
   test-app:
