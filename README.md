@@ -57,7 +57,7 @@ The AWS SAM CLI is a command line tool that I used with AWS SAM templates to bui
 ------------------
 In the SAM template, I created a new DynamoDBTable resource to hold visitor count data. Named the table visitor-count-table. Set capacity to On-demand to save on costs. The table holds a single attribute (ID), which will be updated by the Lambda function.
 
-```
+```yaml
   DynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -82,7 +82,7 @@ When deciding what architetural pattern to use there are many trade-offs between
 
 Initally, I created a single monolithic Lambda function:
 
-```
+```python
 import json
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -126,7 +126,7 @@ However, after reading a really interesting article by Yan Cui, [AWS Lambda – 
 
 I decided to break my monolithic function into two single-purposed functions. I achieved this by reconfiguring my Hello World Function deployed by SAM CLI, and created a get-function for getting values out of my database, and a put-function for putting items into my database:
 
-```
+```yaml
   GetCountFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -145,7 +145,7 @@ I decided to break my monolithic function into two single-purposed functions. I 
             Path: /get
             Method: get
 ```
-```
+```yaml
   PutCountFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -165,11 +165,11 @@ I decided to break my monolithic function into two single-purposed functions. I 
             Method: get
 ```
 
-#### get-function
+#### Get-Function
 
-I then updated the code in the functions:
+I then updated my python in the functions:
 
-```
+```python
 import boto3
 import json
 from boto3.dynamodb.conditions import Key
@@ -198,9 +198,9 @@ def lambda_handler(event, context):
     }
 ```
 
-#### put-function
+#### Put-Function
 
-```
+```python
 import boto3
 import json
 from boto3.dynamodb.conditions import Key
@@ -238,7 +238,7 @@ The SAM CLI deploys API infrastructure under the hood. Rest API allows access to
 
 It was important to configure CORS headers. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers:
 
-```
+```json
     return {
         'statusCode': 200,
         'headers': {
@@ -252,7 +252,7 @@ It was important to configure CORS headers. In the response of my Lambda Functio
 
 In the index.html I added a JavaScript that makes a fetch request to my API from API gateway.
 
-```
+```javascript
   <script type = "text/javascript">
     var apiUrl = "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put";
       fetch(apiUrl)
@@ -270,7 +270,7 @@ My website can now fetch and display the latest visitor count.
 ------------------
 I set up a CI/CD pipeline on GitHub Actions. The pipeline activates upon pushing code starting with SAM Validation, Build and Deploy.
 
-```
+```yaml
 jobs:  
   build-and-deploy-infra:
     runs-on: ubuntu-latest
@@ -300,7 +300,7 @@ This workflow updates the SAM stack currently deployed. The AWS access keys are 
 
 Included an integration test, which tests the GET API endpoint:
 
-```
+```bash
 integration-test:
 		FIRST=$$(curl -s "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get" | jq ".body| tonumber"); \
 		curl -s "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put"; \
@@ -309,4 +309,17 @@ integration-test:
 		if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
 ```  
 
-The test calls the GET API using curl and then calls my domain, digitalden.cloud. It Uses jq, a query for JSON to grab the count property and then stores it in a variable. The test then calls the API using curl, for a second time. However, this time it adds to the count, which increases the value, and stores it into a second variable. If the first request is less than the second, the test passes.
+This script performs the following steps:
+
+1. Sends a GET request to the URL https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get" and retrieves the value of the "body" field from the JSON response using the jq command, which is then assigned to the variable FIRST.
+
+2. Sends a PUT request to the URL "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put".
+
+3. Sends another GET request to the same URL as step 1 and retrieves the value of the "body" field from the JSON response using jq, which is then assigned to the variable SECOND.
+
+4. Prints a message that compares the values of FIRST and SECOND to see if FIRST is less than or equal to SECOND.
+
+5. If FIRST is less than or equal to SECOND, it prints "PASS", otherwise it prints "FAIL".
+
+### Acknowledgements
+* [Cloud Resume Challenge](https://cloudresumechallenge.dev/)
