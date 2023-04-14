@@ -18,9 +18,9 @@ jobs:
       - name: install boto3
         run: pip install boto3
       - name: Test Get Function
-        run: cd single-purposed-functions/get-function && python test.py -v && cd ../..
+        run: cd lambda-functions/single-purposed-functions/get-function && python test.py -v && cd ../..
       - name: Test Put Function
-        run: cd single-purposed-functions/put-function && python test.py -v && cd ../..
+        run: cd lambda-functions/single-purposed-functions/put-function && python test.py -v && cd ../..
 
 
   build-and-deploy-infra:
