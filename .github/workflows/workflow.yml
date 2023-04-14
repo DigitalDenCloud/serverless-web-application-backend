@@ -11,7 +11,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:  
-  test-app:
+  test-infra:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps: 
@@ -26,8 +26,8 @@ jobs:
       - name: Test Put Function
         run: cd lambda-functions/single-purposed-functions/put-function && python test.py -v && cd ../..
 
-
   build-and-deploy-infra:
+    needs: test-infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
