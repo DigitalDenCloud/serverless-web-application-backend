@@ -6,6 +6,23 @@ on:
       - dev
 
 jobs:  
+
+  test-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps: 
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{env.PYTHON_VERSION }}
+      - name: install boto3
+        run: pip install boto3
+      - name: Test Get Function
+        run: cd simple-purposed-function/get-function && python test.py -v && cd ../..
+      - name: Test Put Function
+        run: cd simple-purposed-function/put-function && python test.py -v && cd ../..
+
+
   build-and-deploy-infra:
     runs-on: ubuntu-latest
     steps:
