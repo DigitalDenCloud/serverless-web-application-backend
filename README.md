@@ -30,7 +30,7 @@
     <li><a href="#sam-local-invoke">SAM Local Invoke</a></li>
     <li><a href="#unit-testing">Unit Testing</a></li>
     <li><a href="#github-actions">Github Actions</a></li>
-    li><a href="#integration-testing">Integration Testing</a></li>
+    <li><a href="#integration-testing">Integration Testing</a></li>
     <li><a href="#project-files">Project Files</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
