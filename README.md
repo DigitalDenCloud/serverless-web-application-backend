@@ -193,6 +193,7 @@ I created a get-function for getting values out of my database, and a put-functi
 ```
 
 #### Get-Function
+---
 
 Updated my python code in the functions:
 
@@ -226,6 +227,7 @@ def lambda_handler(event, context):
 ```
 
 #### Put-Function
+---
 
 ```python
 import boto3
@@ -277,7 +279,7 @@ It was important to configure CORS headers for this to work. In the response of 
     }
 ```
 
-In the index.html I added a JavaScript that makes a fetch request to my API from API gateway.
+In the index.html I added a JavaScript that makes a fetch request to my API from API gateway:
 
 ```javascript
   <script type = "text/javascript">
@@ -294,12 +296,14 @@ In the index.html I added a JavaScript that makes a fetch request to my API from
 My website can now fetch and display the latest visitor count.
 
 ### SAM Local Invoke
+------------------
 
 I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI creates a local container, builds the function, invokes it, and outputs the results.
 
 ![Sam Local Invoke](resources/images/sam-local-invoke-putcountfunction.png)
 
 #### Unit Testing
+------------------
 
 My CI/CD pipeline activates upon pushing code starting with running Unit tests in python for my get-function and put-function. The test ensures that the functions returns a response with a statusCode of 200, meaning my API is functioning correctly.
 
@@ -360,8 +364,9 @@ This deploys my application infrastructure to AWS and depends on my Unit Test to
 The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. 
 
 #### Integration Testing
+------------------
 
-Configured an integration test to tests the GET API endpoint:
+Configured an integration test to tests the GET API endpoint. Added the test to Github Action Workflow file:
 
 ```bash
 integration-test:
@@ -379,6 +384,7 @@ The purpose of the test is to check if the count value returned by the API has b
 
 ### Project Files
 ------------------
+* [Github Action Workflows](.github/workflows/workflow.yml)
 * [SAM template](template.yaml)
 
 ### Acknowledgements
