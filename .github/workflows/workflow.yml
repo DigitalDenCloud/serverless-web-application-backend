@@ -1,4 +1,4 @@
-name: SAM Validate, Test, Build, Deploy
+name: back-end build and deploy workflow
 on:
   push:
     branches:
