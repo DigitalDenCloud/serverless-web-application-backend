@@ -4,11 +4,11 @@
   <a href="img/">
     <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="architecture">
   </a>
-  <h1 align="center">A Serverless Website: Backend Repo</h1>
+  <h1 align="center">A Serverless Website</h1>
 <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD. 
     <br />
-    Website: https://digitalden.cloud
+    Back-End Repo to my Website: https://digitalden.cloud
     <br />
   </p>
 
@@ -27,7 +27,10 @@
     <li><a href="#dynamodb">DynamoDB</a></li>
     <li><a href="#lambda-function">Lambda Function</a></li>
     <li><a href="#api-gateway-and-javascript">API Gateway and JavaScript</a></li>
+    <li><a href="#sam-local-invoke">SAM Local Invoke</a></li>
+    <li><a href="#unit-testing">Unit Testing</a></li>
     <li><a href="#github-actions">Github Actions</a></li>
+    li><a href="#integration-testing">Integration Testing</a></li>
     <li><a href="#project-files">Project Files</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
@@ -58,29 +61,22 @@ The backend components of my website support a counter of visitors to my  websit
 
 The AWS SAM CLI is a command line tool that I used with AWS SAM templates to build and run my serverless applications. 
 
-#### Initialized my project
+#### Initializing my project
 
-- I use the sam init command to initialize a new application project. I selected the Python for my Lambda code and Hello World Example project to start with. The AWS SAM CLI downloaded a starter template and created my project folder directory structure.
+- I used the sam init command to initialize a new application project. I selected Python for my Lambda code and Hello World Example project to start with. The AWS SAM CLI downloaded a starter template and created my project folder directory structure. The stack included API Gateway, IAM Role and Lambda function.
 
-- The stack included API Gateway, IAM Role and Lambda function.
+#### Building my application for deployment
 
-#### Built my application for deployment
-
-- I packaged my function dependencies and organized my project code and folder structure to prepare for deployment.
+- I packaged my function dependencies and organized my project code and folder structure to prepare for deployment. 
 
 - I used the sam build command to prepare my application for deployment. The AWS SAM CLI created a .aws-samdirectory and organized my application dependencies and files there for deployment.
 
-#### Performed local debugging and testing
 
-- I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI created a local container, built my function, invokes it, and outputs the results.
-
-![Sam Local Invoke](resources/images/sam-local-invoke-putcountfunction.png)
-
-#### Deployed my application
+#### Deploying my application
 
 - I configured my application's deployment settings and deployed to the AWS Cloud to provision my resources.
 
-- I used the sam deploy --guided command to deploy my application through an interactive flow. The AWS SAM CLI guided me through configuring my application's deployment settings, transformed my template into AWS CloudFormation, and deployed to AWS CloudFormation to create my resources.
+- I used the sam deploy --guided command to deploy my application through an interactive flow. The AWS SAM CLI guided me through configuring my application's deployment settings, transforming my template into AWS CloudFormation, and deploying to AWS CloudFormation to create my resources.
 
 ### DynamoDB
 ------------------
@@ -109,7 +105,7 @@ There are two types of architectural patterns.
 
 When deciding what architectural pattern to use there are many trade-offs between monoliths and services. A monolithic function has more branching and in general does more things, this would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
 
-Initally, I created a single monolithic Lambda function:
+Initially, I created a single monolithic Lambda function:
 
 ```python
 import json
@@ -153,7 +149,9 @@ def lambda_handler(event, context):
 
 However, after reading a really interesting article by Yan Cui, [AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
 
-I decided to break my monolithic function into two single-purposed functions. I achieved this by reconfiguring my Hello World Function deployed by SAM CLI, and created a get-function for getting values out of my database, and a put-function for putting items into my database:
+I decided to break my monolithic function into two single-purposed functions by reconfiguring my Hello World Function deployed by SAM CLI. 
+
+I created a get-function for getting values out of my database, and a put-function for putting items into my database:
 
 ```yaml
   GetCountFunction:
@@ -196,7 +194,7 @@ I decided to break my monolithic function into two single-purposed functions. I 
 
 #### Get-Function
 
-I then updated my python in the functions:
+Updated my python code in the functions:
 
 ```python
 import boto3
@@ -265,7 +263,7 @@ def lambda_handler(event, context):
 ------------------
 The SAM CLI deploys API infrastructure under the hood. Rest API allows access to my URL endpoint to accept GET and POST methods. When API URL is accessed the Lambda function is invoked, returning data from my DynamoDB table.
 
-It was important to configure CORS headers. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers:
+It was important to configure CORS headers for this to work. In the response of my Lambda Function,  I added the Access-Control-Allow-Origin headers:
 
 ```python
     return {
@@ -295,13 +293,45 @@ In the index.html I added a JavaScript that makes a fetch request to my API from
 
 My website can now fetch and display the latest visitor count.
 
+### SAM Local Invoke
+
+I used the sam local invoke command to invoke my GetCountFunction and PutCountFunction locally. To accomplish this, the AWS SAM CLI creates a local container, builds the function, invokes it, and outputs the results.
+
+![Sam Local Invoke](resources/images/sam-local-invoke-putcountfunction.png)
+
+#### Unit Testing
+
+My CI/CD pipeline activates upon pushing code starting with running Unit tests in python for my get-function and put-function. The test ensures that the functions returns a response with a statusCode of 200, meaning my API is functioning correctly.
+
+```Python
+import unittest
+import app
+
+
+class TestAPI(unittest.TestCase):
+    def test_getApi_works(self):
+        event = {'ID': 'visitors'}
+        result = app.lambda_handler(event, 0)
+        self.assertEqual(result['statusCode'], 200)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+![Test Get Function](resources/images/test-get-function.png)
+
+
 ### Github Actions
 ------------------
-I set up a CI/CD pipeline on GitHub Actions. The pipeline activates upon pushing code starting with SAM Validation, Build and Deploy.
+I set up a CI/CD pipeline on GitHub Actions workflow. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project. 
+
+I set up GitHub Actions such that when I push an update to my SAM template or Python code, my tests get run. If the tests pass, my SAM application should get packaged and deployed to AWS.
+
+This workflow updates the SAM stack currently deployed: 
 
 ```yaml
-jobs:  
   build-and-deploy-infra:
+    needs: test-infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -325,9 +355,13 @@ jobs:
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
 ```
 
-This workflow updates the SAM stack currently deployed. The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project.
+This deploys my application infrastructure to AWS and depends on my Unit Test to succeed. It runs on an Ubuntu machine, and uses Python and the AWS SAM CLI. It validates my SAM template, builds my infrastructure, and deploys it to AWS.
 
-Included an integration test, which tests the GET API endpoint:
+The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. 
+
+#### Integration Testing
+
+Configured an integration test to tests the GET API endpoint:
 
 ```bash
 integration-test:
@@ -337,18 +371,11 @@ integration-test:
 		echo "Comparing if first count ($$FIRST) is less than (<) second count ($$SECOND)"; \
 		if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
 ```  
+This is a shell script that tests the behavior of my API. The script sends a GET request to my API endpoint, saves the response body in a variable, and then sends a PUT request to the same API endpoint.
 
-This script performs the following steps:
+Next, the script sends another GET request to the API endpoint and saves the response body in a variable. The script then compares the values of the two response bodies using an if statement.
 
-1. Sends a GET request to the URL https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get" and retrieves the value of the "body" field from the JSON response using the jq command, which is then assigned to the variable FIRST.
-
-2. Sends a PUT request to the URL "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put".
-
-3. Sends another GET request to the same URL as step 1 and retrieves the value of the "body" field from the JSON response using jq, which is then assigned to the variable SECOND.
-
-4. Prints a message that compares the values of FIRST and SECOND to see if FIRST is less than or equal to SECOND.
-
-5. If FIRST is less than or equal to SECOND, it prints "PASS", otherwise it prints "FAIL".
+The purpose of the test is to check if the count value returned by the API has been properly incremented by the PUT request. To extract the count value from the JSON response body returned by the API, the jq command is used.
 
 ### Project Files
 ------------------
