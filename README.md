@@ -5,12 +5,15 @@
     <img src="resources/images/digitalden.cloud-backend-architecture-2.png" alt="architecture">
   </a>
   <h1 align="center">A Serverless Website</h1>
-<p align="center">
+  <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD. 
     <br />
-    Back-End Repo to my Website: https://digitalden.cloud
+    This is the back-end repo to my website hosted at:
     <br />
+    <br />
+    https://digitalden.cloud
   </p>
+</p>
 
 
 
@@ -147,11 +150,10 @@ def lambda_handler(event, context):
     }
 ```
 
-However, after reading a really interesting article by Yan Cui, [AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
+However, after reading a really interesting article by Yan Cui:
+[AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
 
-I decided to break my monolithic function into two single-purposed functions by reconfiguring my Hello World Function deployed by SAM CLI. 
-
-I created a get-function for getting values out of my database, and a put-function for putting items into my database:
+I decided to break my monolithic function into two single-purposed functions by reconfiguring my Hello World Function deployed by SAM CLI. I created a get-function for getting values out of my database, and a put-function for putting items into my database:
 
 ```yaml
   GetCountFunction:
@@ -192,10 +194,10 @@ I created a get-function for getting values out of my database, and a put-functi
             Method: get
 ```
 
-#### Get-Function
+#### Get-Function:
 ---
 
-Updated my python code in the functions:
+Then updated my python code:
 
 ```python
 import boto3
@@ -226,7 +228,7 @@ def lambda_handler(event, context):
     }
 ```
 
-#### Put-Function
+#### Put-Function:
 ---
 
 ```python
