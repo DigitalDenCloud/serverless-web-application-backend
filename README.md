@@ -53,7 +53,9 @@
 
 The architecture is deployed by using SAM CLI as the Infrastructure as Code method and GitHub Actions as the CI/CD method.
 
-The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of my counter API, before rendering the response in the footer of the page.  The website can now fetch and display the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
+The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page.  
+
+The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
 
 ### Project date
 ------------------
@@ -62,9 +64,7 @@ The backend components of the website support a counter of visitors to the websi
 ### AWS SAM CLI
 ------------------
 
-The SAM CLI is a command line tool that used with AWS SAM templates to build and run serverless applications. 
-
-It is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
+The SAM CLI is a command line tool that used with AWS SAM templates to build and run serverless applications. It adds functionality for building and testing Lambda applications. It uses Docker to run the functions in an Amazon Linux environment that matches Lambda. It can also emulate the application's build environment and API.
 
 To use the SAM CLI, you need the following tools.
 
@@ -79,7 +79,7 @@ To use the SAM CLI, you need the following tools.
 sam init
 ```
 
-The sam init command to initializes a new application project. Select Python for the Lambda code and Hello World Example project to start with. The AWS SAM CLI downloads a starter template and creates a project folder directory structure. The stack includes an API Gateway, IAM Role and Lambda function.
+The sam init command initializes a new application project. To start with, select Python for the Lambda code and Hello World Example. The AWS SAM CLI downloads a starter template and creates a project folder directory structure. The stack includes an API Gateway, IAM Role and Lambda function.
 
 #### Building the Application for Deployment:
 
@@ -87,10 +87,7 @@ The sam init command to initializes a new application project. Select Python for
 sam build
 ```
 
-Packaged the function dependencies and organized the project code and folder structure to prepare for deployment. 
-
-Use the sam build command to prepare the application for deployment. The AWS SAM CLI creates a .aws-samdirectory and organizes the application dependencies and files there for deployment.
-
+The sam build command packages the function dependencies and organizes the project code and folder structure to prepare for deployment. The AWS SAM CLI creates a .aws-samdirectory and organizes the application dependencies and files there for deployment.
 
 #### Deploying the Application:
 
@@ -131,7 +128,7 @@ When deciding what architectural pattern to use there are many trade-offs betwee
 
 Please read this interesting article by Yan Cui, to help you decide which architectural pattern to use:
 
-[AWS Lambda – should you have few monolithic functions or many single-purposed functions?](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
+![monolithic-single-purposed](resources/images/monolithic-single-purposed.png)[(The Burning Monk)](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
 
 #### Monolithic-function
 ---
