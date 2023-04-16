@@ -133,7 +133,7 @@ Please read this interesting article by [Yan Cui](https://theburningmonk.com/201
 #### Monolithic-function
 ---
 
-This Python script for the monolithic function updates the DynamoDB table with a visitor count. The function takes in an event and context as parameters, retrieves an item from the table with the key "visitors", increments the value of the "visitors" attribute by 1, and returns a JSON response with the updated visitor count. Note that the script assumes that the table has a primary key attribute named "ID" and that the item with the key "visitors" exists in the table.
+This Python script for the monolithic function updates the DynamoDB table with a visitor count. The function takes in an event and context as parameters, retrieves an item from the table with the key "visitors", increments the value of the "visitors" attribute by 1, and returns a JSON response with the updated visitor count. Note that the script assumes that the table has a primary key attribute named "ID" and that the item with the key "visitors" exists in the table:
 
 ```python
 import json
@@ -179,10 +179,10 @@ Initially, I used the monolithic function before deciding to use two single-purp
 
 I broke my monolithic function into two single-purposed functions by reconfiguring the Hello World Function deployed by SAM CLI. I created a get-function for getting values out of the database, and a put-function for putting items into my database. I then updated the python scripts for each function:
 
-#### Get-Function:
+#### Single-Purposed-Function
 ---
 
-This script now only queries the table to retrieve the current visitor count.
+This script for the get-function queries the table to retrieve the current visitor count:
 
 ```python
 import boto3
@@ -213,10 +213,7 @@ def lambda_handler(event, context):
     }
 ```
 
-#### Put-Function:
----
-
-In this script, the update operation is an ADD operation, which increments the value of the "visitors" attribute by the specified value.
+In the put-function script, the update operation is an ADD operation, which increments the value of the "visitors" attribute by the specified value:
 
 ```python
 import boto3
@@ -271,7 +268,7 @@ The code is a Python dictionary that sets the response headers for a web API end
 
 ### JavaScript
 ------------------
-In the index.html I added the JavaScript that makes a fetch request to my API from API gateway. This code fetches data from two different API endpoints, one for making a PUT request and another for making a GET request. It then extracts the JSON data returned by the GET request, updates an HTML element with that data, and logs the same data to the console for debugging purposes: 
+In the index.html add the JavaScript. The JS makes a fetch request to my API from API gateway. The code fetches data from two different API endpoints, one for making a PUT request and another for making a GET request. It then extracts the JSON data returned by the GET request, updates an HTML element with that data, and logs the same data to the console for debugging purposes: 
 
 ```javascript
   <script type = "text/javascript">
@@ -300,7 +297,7 @@ The sam local invoke command invokes the GetCountFunction and PutCountFunction l
 
 ### Github Actions
 ------------------
-This project has a CI/CD pipeline on GitHub Actions workflow. 
+This project has a CI/CD pipeline on GitHub Actions workflow. View the complete workflow [HERE](.github/workflows/workflow.yml)
 
 The pipeline performs automated testing, building, and deployment of the application in response to code changes pushed to the main or dev branches. The pipeline consists of three jobs, each with its own set of steps, that are executed in a sequential manner. 
 
@@ -312,8 +309,27 @@ This project is utilizing GitHub Actions over an AWS CodePipeline for cost savin
 
 #### Unit Testing
 ------------------
-
 The CI/CD pipeline activates upon pushing code starting with running Unit tests in python for the get-function and put-function.
+
+This is the unit test script for testing the Python module named app:
+
+import unittest
+import app 
+
+```python
+class TestAPI(unittest.TestCase):
+    def test_getApi_works(self):
+        event = {'ID': 'visitors'}
+        result = app.lambda_handler(event, 0)
+        self.assertEqual(result['statusCode'], 200)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+ The script uses the unittest module to define and run tests. The TestAPI class is defined, which contains a single test function called test_getApi_works. This test function checks whether the lambda_handler function in the app module returns a result with a status code of 200 when given a specific event. The unittest.main() function is called to run all the tests defined in the script.
+
+![Test Get Function](resources/images/test-get-function.png)
 
 The test-infra job is responsible for testing the infrastructure of the application. This test checks out the code, sets up the Python environment, installs the boto3 package, and test the get-function / put-function by running its test cases using Python's unittest module:
 
@@ -335,8 +351,6 @@ jobs:
         run: cd lambda-functions/single-purposed-functions/put-function && python test.py -v && cd ../..
 ```
 This job ensures that the infrastructure of the application is working as expected and has not been broken due to any recent changes. It is an essential part of the CI/CD pipeline that ensures the quality of the application's codebase.
-
-![Test Get Function](resources/images/test-get-function.png)
 
 #### AWS SAM Build and Deploy
 ------------------
@@ -371,14 +385,12 @@ This workflow updates the SAM stack currently deployed:
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
 ```
 
-This deploys my application infrastructure to AWS and depends on my Unit Test to succeed. It runs on an Ubuntu machine, and uses Python and the AWS SAM CLI. It validates my SAM template, builds my infrastructure, and deploys it to AWS.
+This deploys the application infrastructure to AWS and depends on my Unit Test to succeed. It runs on an Ubuntu machine, and uses Python and the AWS SAM CLI. It validates thhe SAM template, builds the infrastructure, and deploys it to AWS.
 
 The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. 
 
 #### Integration Testing
 ------------------
-
-An integration test has been added to the test to Github Action Workflow to test the GET API endpoint:
 
 ```bash
 integration-test:
@@ -388,11 +400,26 @@ integration-test:
 		echo "Comparing if first count ($$FIRST) is less than (<) second count ($$SECOND)"; \
 		if [[ $$FIRST -le $$SECOND ]]; then echo "PASS"; else echo "FAIL";  fi
 ```  
-This is a shell script that tests the behavior of the API. The script sends a GET request to the API endpoint, saves the response body in a variable, and then sends a PUT request to the same API endpoint.
+This is a the  shell script that tests the behavior of the API. The script sends a GET request to the API endpoint, saves the response body in a variable, and then sends a PUT request to the same API endpoint.
 
 Next, the script sends another GET request to the API endpoint and saves the response body in a variable. The script then compares the values of the two response bodies using an if statement.
 
 The purpose of the test is to check if the count value returned by the API has been properly incremented by the PUT request. To extract the count value from the JSON response body returned by the API, the jq command is used.
+
+The integration test has been added to Github Action Workflow:
+
+```yaml
+  integration-test-backend:
+    needs: build-and-deploy-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: make integration-test
+```
+
+This job (integration-test-backend) depends on the previous job called build-and-deploy-infra and runs on an Ubuntu operating system. The job checks out the source code from the repository and runs an integration test using the make command. 
+
+The purpose of this job is to run integration tests on the application after it has been built and deployed to the infrastructure.
 
 ### Project Files
 ------------------
