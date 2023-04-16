@@ -8,8 +8,6 @@
   <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
      <br />
-     For the front-end of the website, [click here](https://github.com/digitalden3/digitalden.cloud-frontend).
-     <br />
     This is the back-end repo to the website:
     <br />
     https://digitalden.cloud
@@ -75,7 +73,7 @@ To use the SAM CLI, you need the following tools.
 * Docker: [Install Docker community edition](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html#install-docker-instructions)
 
 
-#### Initializing the project
+#### Initializing the Project:
 
 ```bash
 sam init
@@ -83,7 +81,7 @@ sam init
 
 The sam init command to initializes a new application project. Select Python for the Lambda code and Hello World Example project to start with. The AWS SAM CLI downloads a starter template and creates a project folder directory structure. The stack includes an API Gateway, IAM Role and Lambda function.
 
-#### Building my application for deployment
+#### Building the Application for Deployment:
 
 ```bash
 sam build
@@ -94,7 +92,7 @@ Packaged the function dependencies and organized the project code and folder str
 Use the sam build command to prepare the application for deployment. The AWS SAM CLI creates a .aws-samdirectory and organizes the application dependencies and files there for deployment.
 
 
-#### Deploying my application
+#### Deploying the Application:
 
 ```bash
 sam deploy --guided
@@ -313,6 +311,8 @@ The first job tests the infrastructure, the second job builds and deploys the in
 
 This project is utilizing GitHub Actions over an AWS CodePipeline for cost savings and is a better alternative based on the scope of this project. 
 
+![Backend Build & Deploy](resources/images/back-end-build-and-deploy.png)
+
 #### Unit Testing
 ------------------
 
@@ -396,8 +396,6 @@ This is a shell script that tests the behavior of the API. The script sends a GE
 Next, the script sends another GET request to the API endpoint and saves the response body in a variable. The script then compares the values of the two response bodies using an if statement.
 
 The purpose of the test is to check if the count value returned by the API has been properly incremented by the PUT request. To extract the count value from the JSON response body returned by the API, the jq command is used.
-
-![Backend Build & Deploy](resources/images/back-end-build-and-deploy.png)
 
 ### Project Files
 ------------------
