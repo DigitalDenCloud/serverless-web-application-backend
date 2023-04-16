@@ -7,8 +7,8 @@
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
-    <br />
-     For the front-end of the website, [click here](https://github.com/digitalden3/digitalden.cloud-frontend)
+     <br />
+     For the front-end of the website, [click here](https://github.com/digitalden3/digitalden.cloud-frontend).
      <br />
     This is the back-end repo to the website:
     <br />
@@ -53,9 +53,9 @@
 ### Project Description
 ------------------
 
-To deploy my architecture I used SAM CLI as my Infrastructure as Code method and GitHub Actions as my CI/CD method.
+The architecture is deployed by using SAM CLI as the Infrastructure as Code method and GitHub Actions as the CI/CD method.
 
-The backend components of my website support a counter of visitors to my  website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of my counter API, before rendering the response in the footer of the page.  My site can now fetch and display the latest visitor count, while the Lambda function handled incrementation as it interacted exclusively with the database.
+The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of my counter API, before rendering the response in the footer of the page.  The website can now fetch and display the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
 
 ### Project date
 ------------------
@@ -70,9 +70,9 @@ It is an extension of the AWS CLI that adds functionality for building and testi
 
 To use the SAM CLI, you need the following tools.
 
-* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-* Python 3 [Install Python 3](https://www.python.org/downloads/)
-* Docker - [Install Docker community edition](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html#install-docker-instructions)
+* SAM CLI: [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+* Python 3: [Install Python 3](https://www.python.org/downloads/)
+* Docker: [Install Docker community edition](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html#install-docker-instructions)
 
 
 #### Initializing the project
