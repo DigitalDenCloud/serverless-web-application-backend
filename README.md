@@ -126,9 +126,9 @@ There are two types of architectural patterns included in this repo.
 
 When deciding what architectural pattern to use there are many trade-offs between monoliths and services. A monolithic function has more branching and in general does more things, this would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
 
-Please read this interesting article by Yan Cui, to help you decide which architectural pattern to use:
+Please read this interesting article by [Yan Cui](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/), to help you decide which architectural pattern to use:
 
-![monolithic-single-purposed](resources/images/monolithic-single-purposed.png)[(The Burning Monk)](https://theburningmonk.com/2018/01/aws-lambda-should-you-have-few-monolithic-functions-or-many-single-purposed-functions/)
+![monolithic-single-purposed](resources/images/monolithic-single-purposed.png)
 
 #### Monolithic-function
 ---
