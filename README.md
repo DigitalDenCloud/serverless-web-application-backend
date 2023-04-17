@@ -49,13 +49,16 @@
 - GitHub Actions (CI/CD)
 
 ### Project Description
-------------------
+-----------------
+The architecture is deployed by using SAM CLI as the Infrastructure as Code method and GitHub Actions as the Continuous Integration and Continuous Deployment method. 
 
-The architecture is deployed by using SAM CLI as the Infrastructure as Code method and GitHub Actions as the CI/CD method.
+The CI/CD pipeline consists of three jobs, each with its own set of steps, that are executed in a sequential manner:
 
-The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page.  
+1. Infrastructure testing job: Verifies that the infrastructure is ready for deployment
+2. Build and deployment job: Builds the code and deploys it to a staging or production environment
+3. Integration testing job: Verifies that the newly deployed code is integrated correctly with the rest of the system
 
-The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
+The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page.  The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
 
 ### Project date
 ------------------
@@ -66,11 +69,11 @@ The website fetches and displays the latest visitor count, while the Lambda func
 
 The SAM CLI is a command line tool that used with AWS SAM templates to build and run serverless applications. It adds functionality for building and testing Lambda applications. It uses Docker to run the functions in an Amazon Linux environment that matches Lambda. It can also emulate the application's build environment and API.
 
-To use the SAM CLI, you need the following tools.
+To use the SAM CLI, you need the following tools:
 
 * SAM CLI: [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 * Python 3: [Install Python 3](https://www.python.org/downloads/)
-* Docker: [Install Docker community edition](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html#install-docker-instructions)
+* Docker: [Install Docker](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-docker.html#install-docker-instructions)
 
 
 #### Initializing the Project:
@@ -95,9 +98,8 @@ The sam build command packages the function dependencies and organizes the proje
 sam deploy --guided
 ```
 
-Configure the application's deployment settings and deploy to the AWS Cloud to provision my resources.
 
-Using the sam deploy --guided command to deploy the application through an interactive flow. The AWS SAM CLI guides you through configuring the application's deployment settings, transforming the template into AWS CloudFormation, and deploying to AWS CloudFormation to create the resources.
+The sam deploy --guided command deploys the application through an interactive flow. The AWS SAM CLI guides you through configuring the application's deployment settings, transforming the template into AWS CloudFormation, and deploying to AWS CloudFormation to create the resources.
 
 ### DynamoDB
 ------------------
@@ -121,8 +123,8 @@ In the SAM template, create a new DynamoDBTable resource to hold visitor count d
 ------------------
 There are two types of architectural patterns included in this repo.
 
-- A Monolithic Function (Putting all code in single Lambda deployment)
-- Two Single Purposed Functions (Each Lambda per functionality)
+- Monolithic Function (Putting all code in single Lambda deployment)
+- Single Purposed Functions (Each Lambda per functionality)
 
 When deciding what architectural pattern to use there are many trade-offs between monoliths and services. A monolithic function has more branching and in general does more things, this would understandably take more cognitive effort to comprehend and follow through to the code that is relevant to the problem at hand.
 
@@ -132,7 +134,6 @@ Please read this interesting article by [Yan Cui](https://theburningmonk.com/201
 
 #### Monolithic-function
 ---
-
 This Python script for the monolithic function updates the DynamoDB table with a visitor count. The function takes in an event and context as parameters, retrieves an item from the table with the key "visitors", increments the value of the "visitors" attribute by 1, and returns a JSON response with the updated visitor count. Note that the script assumes that the table has a primary key attribute named "ID" and that the item with the key "visitors" exists in the table:
 
 ```python
@@ -175,9 +176,12 @@ def lambda_handler(event, context):
     }
 ```
 
-Initially, I used the monolithic function before deciding to use two single-purposed function. 
+Initially, I deployed the monolithic function before breaking the monolith into two single-purposed functions.  I achieved this by reconfiguring the Hello World Function deployed by SAM CLI and configured:
 
-I broke my monolithic function into two single-purposed functions by reconfiguring the Hello World Function deployed by SAM CLI. I created a get-function for getting values out of the database, and a put-function for putting items into my database. I then updated the python scripts for each function:
+- A get-function for getting values out of the database
+- A put-function for putting items into my database. 
+
+I then wrote python scripts for each function:
 
 #### Single-Purposed-Function
 ---
@@ -268,7 +272,7 @@ The code is a Python dictionary that sets the response headers for a web API end
 
 ### JavaScript
 ------------------
-In the index.html add the JavaScript. The JS makes a fetch request to my API from API gateway. The code fetches data from two different API endpoints, one for making a PUT request and another for making a GET request. It then extracts the JSON data returned by the GET request, updates an HTML element with that data, and logs the same data to the console for debugging purposes: 
+In the index.html add the following JavaScript. The JS makes a fetch request to the API from API gateway. The code fetches data from two different API endpoints, one for making a PUT request and another for making a GET request. It then extracts the JSON data returned by the GET request, updates an HTML element with that data, and logs the same data to the console for debugging purposes: 
 
 ```javascript
   <script type = "text/javascript">
@@ -313,10 +317,11 @@ The CI/CD pipeline activates upon pushing code starting with running Unit tests 
 
 This is the unit test script for testing the Python module named app:
 
+```python
 import unittest
 import app 
 
-```python
+
 class TestAPI(unittest.TestCase):
     def test_getApi_works(self):
         event = {'ID': 'visitors'}
@@ -354,7 +359,6 @@ This job ensures that the infrastructure of the application is working as expect
 
 #### AWS SAM Build and Deploy
 ------------------
-
 GitHub Actions are set up in such that when you push an update to the SAM template or Python code, the tests get run. If the tests pass, the SAM application gets packaged and deployed to AWS.
 
 This workflow updates the SAM stack currently deployed: 
@@ -385,7 +389,7 @@ This workflow updates the SAM stack currently deployed:
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
 ```
 
-This deploys the application infrastructure to AWS and depends on my Unit Test to succeed. It runs on an Ubuntu machine, and uses Python and the AWS SAM CLI. It validates thhe SAM template, builds the infrastructure, and deploys it to AWS.
+This job deploys the application infrastructure to AWS and depends on the Unit Test to succeed. It runs on an Ubuntu machine, and uses Python and the AWS SAM CLI. It validates the SAM template, builds the infrastructure, and deploys it to AWS.
 
 The AWS access keys are stored as GitHub Secrets and the user has very limited access to resources. The SAM Deploy assumes a role to deploy the needed resources. 
 
